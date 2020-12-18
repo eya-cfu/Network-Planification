@@ -55,14 +55,20 @@ public class AccessPoint {
 
     public static int calculateAP(int a, int b, ArrayList<AccessPoint> APs){
         int i;
-        double[] distances = new double[APs.size()];
-        HashMap<Double, AccessPoint> hashMap=new HashMap<Double, AccessPoint>();
+        double distance;
+        int closestAP=0;
+        double minDistance;
+
+        minDistance = Math.sqrt((APs.get(0).xc - a) * (APs.get(0).xc - a) + (APs.get(0).yc - b) * (APs.get(0).yc - b));
+
         for (i=0; i<APs.size();i++) {
-            distances[i] = Math.sqrt((APs.get(i).xc - a) * (APs.get(i).xc - a) + (APs.get(i).yc - b) * (APs.get(i).yc - b));
-            hashMap.put(distances[i],APs.get(i));
+            distance = Math.sqrt((APs.get(i).xc - a) * (APs.get(i).xc - a) + (APs.get(i).yc - b) * (APs.get(i).yc - b));
+            if(minDistance>distance) {
+                minDistance = distance;
+                closestAP = i;
+            }
         }
-        TreeMap<Double,AccessPoint> treeMap=new TreeMap<Double, AccessPoint>(hashMap);
-        return treeMap.get(treeMap.firstKey()).num;
+        return closestAP;
     }
 
 
