@@ -20,7 +20,8 @@ public class ProgramUI extends JFrame implements MouseListener {
     JButton addObstacleBtn;
     JButton addUserBtn;
     JPanel drawPanel;
-    JLabel puissLabel, userLabel;
+    JLabel puissLabel;
+    JTextArea userLabel;
     JTextField tfPuissance;
     Boolean APMode = false;
     Boolean obstacleMode = false ;
@@ -29,6 +30,10 @@ public class ProgramUI extends JFrame implements MouseListener {
 
     ArrayList<AccessPoint> APs = new ArrayList<>();
     AccessPoint ap;
+    ArrayList<Obstacle> obs_list = new ArrayList<Obstacle>();
+    Object[] materials = {"bois","plastique","verre","verre teinté","eau","être vivant","briques","plâtre",
+                            "céramique","papier","béton","verre blindé","métal"};
+
 
 
 
@@ -43,8 +48,10 @@ public class ProgramUI extends JFrame implements MouseListener {
         addUserBtn = new JButton("Ajouter un utilisateur");
         drawPanel = new JPanel();
         tfPuissance = new JTextField();
-        puissLabel = new JLabel("Puissance de signal (mW)");
-        userLabel = new JLabel("");
+        puissLabel = new JLabel("Puissance de signal [10,100] (mW)");
+        userLabel = new JTextArea("");
+        userLabel.setLineWrap(true);
+        userLabel.setVisible(false);
 
 
         addAPBtn.setBounds(650,10,220,30);
@@ -53,7 +60,7 @@ public class ProgramUI extends JFrame implements MouseListener {
         drawPanel.setBounds(0,0,645,500);
         puissLabel.setBounds(650,130,220,30);
         tfPuissance.setBounds(650,160,220,30);
-        userLabel.setBounds(650,200,220,30);
+        userLabel.setBounds(650,200,220,50);
 
 
         drawPanel.addMouseListener(this);
@@ -67,30 +74,34 @@ public class ProgramUI extends JFrame implements MouseListener {
                 obstacleMode = false;
             }
         });
-        addUserBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                userMode = true;
-                APMode = false;
-                obstacleMode = false;
-                String s = JOptionPane.showInputDialog("Entree les coordonnees de l'utilisateur x-y");
-                x= Integer.parseInt(s.substring(0,s.indexOf('-')));
-                y= Integer.parseInt(s.substring(s.indexOf('-')+1));
-                if(APs.size()!=0){
-                    userLabel.setText("user at ("+x+","+y+") is closest to AP"+AccessPoint.calculateAP(x,y,APs));
-                } else {
-                    userLabel.setText("No APs available");
-                }
+        addUserBtn.addActionListener(actionEvent -> {
+            userMode = true;
+            APMode = false;
+            obstacleMode = false;
+            String s1 = JOptionPane.showInputDialog("Entree les coordonnees de l'utilisateur x-y\n" +
+                    "0<x<645 et 0<y<500");
+            x= Integer.parseInt(s1.substring(0, s1.indexOf('-')));
+            y= Integer.parseInt(s1.substring(s1.indexOf('-')+1));
+            AccessPoint ap = AccessPoint.calculateAP(x,y,APs);
+            String zone = ap.distance(x,y) < ap.r ? " et dans sa zone de couverture" : " mais n'est pas dans sa zone de couverture" ;
+            if(APs.size()!=0){
+                userLabel.setText("l'utilisateur a ("+x+","+y+") est plus proche de l'AP "+ap.num
+                + zone);
+            } else {
+                userLabel.setText("No APs available");
+            }
+            userLabel.setVisible(true);
 
-            }
         });
-        addObstacleBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                obstacleMode = true ;
-                APMode = false;
-                userMode = false;
-            }
+        addObstacleBtn.addActionListener(actionEvent -> {
+            obstacleMode = true ;
+            APMode = false;
+            userMode = false;
+            Component component = (Component) actionEvent.getSource();
+            JFrame frame = (JFrame) SwingUtilities.getRoot(component);
+            String s1 = (String) JOptionPane.showInputDialog(component,"Choisir le matériau","Obstacle",
+                    JOptionPane.PLAIN_MESSAGE,null,materials,materials[0]);
+
         });
 
         add(addAPBtn);
@@ -125,16 +136,24 @@ public class ProgramUI extends JFrame implements MouseListener {
         }
 
         if(APMode){
-            puissance =  Float.parseFloat(tfPuissance.getText());
-            ap = new AccessPoint(x,y, APs.size(),puissance);
-            ap.drawCellule(ga);
-            ga.setPaint(Color.black);
-            ga.drawString("AP"+ap.num,x,y);
-            APs.add(ap);
+            try {
+                puissance = Float.parseFloat(tfPuissance.getText());
+                ap = new AccessPoint(x,y, APs.size(),puissance);
+                ap.drawCellule(ga);
+                ga.setPaint(Color.black);
+                ga.drawString("AP"+ap.num,x,y);
+                APs.add(ap);
+            } catch(NumberFormatException ex){
+                JOptionPane.showMessageDialog(this,"Entrer la puissance de signal",
+                        "Alerte",JOptionPane.WARNING_MESSAGE);
+            }
+
        // }else if(userMode){
 
         }else if(obstacleMode){
-
+            Obstacle obs = new Obstacle(x, y);
+            obs.drawObstacle(ga);
+            obs_list.add(obs);
         }
 
     }

@@ -29,7 +29,7 @@ public class AccessPoint {
 
         for ( i = 0; i < 2 * r; i++)
             for ( j = 0; j < 2 * r; j++) {
-                f = Facteur_Attenuation( ((xc - r) + i), ((yc - r) + j));
+                f = facteur_Attenuation( ((xc - r) + i), ((yc - r) + j));
                 G = (int) (f * 255.0);
                 if (f != 0) {
                     C = new Color(255-G, 255, 0, 128);
@@ -40,20 +40,20 @@ public class AccessPoint {
             }
     }
 
-    double distance( int x, int y) {
+     double distance( int x, int y) {
         return Math.sqrt((xc - x) * (xc - x) + (yc - y) * (yc - y));
     }
 
     // facteur d'attenuation du signal, si égal à 1 puissance maximale, si 0
     //pas de signal
-    double Facteur_Attenuation( int x, int y)
-    { // estimation à corriger selon la formule d’attinuation !!!
+    private double facteur_Attenuation( int x, int y)
+    { // estimation à corriger selon la formule d’attenuation !!!
         double f = 1.0 - distance( x, y) / ((double) r);
         if (f < 0) return (0);
         return (f);
     }
 
-    public static int calculateAP(int a, int b, ArrayList<AccessPoint> APs){
+    static AccessPoint calculateAP(int a, int b, ArrayList<AccessPoint> APs){
         int i;
         double distance;
         int closestAP=0;
@@ -68,7 +68,7 @@ public class AccessPoint {
                 closestAP = i;
             }
         }
-        return closestAP;
+        return APs.get(closestAP);
     }
 
 
