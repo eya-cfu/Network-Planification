@@ -32,7 +32,7 @@ public class ProgramUI extends JFrame implements MouseListener {
     ArrayList<Obstacle> obs_list = new ArrayList<Obstacle>();
     Object[] materials = {"bois","plastique","verre","verre teinté","eau","être vivant","briques","plâtre",
                             "céramique","papier","béton","verre blindé","métal"};
-
+    String material;
 
 
 
@@ -97,8 +97,7 @@ public class ProgramUI extends JFrame implements MouseListener {
             APMode = false;
             userMode = false;
             Component component = (Component) actionEvent.getSource();
-            JFrame frame = (JFrame) SwingUtilities.getRoot(component);
-            String s1 = (String) JOptionPane.showInputDialog(component,"Choisir le matériau","Obstacle",
+            material = (String) JOptionPane.showInputDialog(component,"Choisir le matériau","Obstacle",
                     JOptionPane.PLAIN_MESSAGE,null,materials,materials[0]);
 
         });
@@ -148,6 +147,7 @@ public class ProgramUI extends JFrame implements MouseListener {
             }
 
         }else if(userMode){
+
             User user = new User(x, y);
             user.drawUser(ga);
             if(APs.size()!=0){
@@ -159,10 +159,14 @@ public class ProgramUI extends JFrame implements MouseListener {
                 userLabel.setText("No APs available");
             }
             userLabel.setVisible(true);
+
+
         }else if(obstacleMode){
-            Obstacle obs = new Obstacle(x, y);
+
+            Obstacle obs = new Obstacle(x, y, material);
             obs.drawObstacle(ga);
             obs_list.add(obs);
+
         }
 
     }
