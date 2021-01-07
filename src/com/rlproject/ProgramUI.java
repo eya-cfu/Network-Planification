@@ -29,7 +29,6 @@ public class ProgramUI extends JFrame implements MouseListener {
     float puissance = 0 ;
 
     ArrayList<AccessPoint> APs = new ArrayList<>();
-    AccessPoint ap;
     ArrayList<Obstacle> obs_list = new ArrayList<Obstacle>();
     Object[] materials = {"bois","plastique","verre","verre teinté","eau","être vivant","briques","plâtre",
                             "céramique","papier","béton","verre blindé","métal"};
@@ -78,7 +77,7 @@ public class ProgramUI extends JFrame implements MouseListener {
             userMode = true;
             APMode = false;
             obstacleMode = false;
-            String s1 = JOptionPane.showInputDialog("Entree les coordonnees de l'utilisateur x-y\n" +
+          /*  String s1 = JOptionPane.showInputDialog("Entree les coordonnees de l'utilisateur x-y\n" +
                     "0<x<645 et 0<y<500");
             x= Integer.parseInt(s1.substring(0, s1.indexOf('-')));
             y= Integer.parseInt(s1.substring(s1.indexOf('-')+1));
@@ -90,7 +89,7 @@ public class ProgramUI extends JFrame implements MouseListener {
             } else {
                 userLabel.setText("No APs available");
             }
-            userLabel.setVisible(true);
+            userLabel.setVisible(true); */
 
         });
         addObstacleBtn.addActionListener(actionEvent -> {
@@ -138,7 +137,7 @@ public class ProgramUI extends JFrame implements MouseListener {
         if(APMode){
             try {
                 puissance = Float.parseFloat(tfPuissance.getText());
-                ap = new AccessPoint(x,y, APs.size(),puissance);
+                AccessPoint ap = new AccessPoint(x,y, APs.size(),puissance);
                 ap.drawCellule(ga);
                 ga.setPaint(Color.black);
                 ga.drawString("AP"+ap.num,x,y);
@@ -148,8 +147,18 @@ public class ProgramUI extends JFrame implements MouseListener {
                         "Alerte",JOptionPane.WARNING_MESSAGE);
             }
 
-       // }else if(userMode){
-
+        }else if(userMode){
+            User user = new User(x, y);
+            user.drawUser(ga);
+            if(APs.size()!=0){
+                AccessPoint ap = AccessPoint.calculateAP(x,y,APs);
+                String zone = ap.distance(x,y) < ap.r ? " et dans sa zone de couverture" : " mais n'est pas dans sa zone de couverture" ;
+                userLabel.setText("l'utilisateur a ("+x+","+y+") est plus proche de l'AP "+ap.num
+                        + zone);
+            } else {
+                userLabel.setText("No APs available");
+            }
+            userLabel.setVisible(true);
         }else if(obstacleMode){
             Obstacle obs = new Obstacle(x, y);
             obs.drawObstacle(ga);

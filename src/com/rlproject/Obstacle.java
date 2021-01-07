@@ -1,6 +1,5 @@
 package com.rlproject;
 import java.awt.* ;
-import javax.swing.* ;
 public class Obstacle {
 
      int xc, yc;
