@@ -65,13 +65,10 @@ public class ProgramUI extends JFrame implements MouseListener {
         drawPanel.addMouseListener(this);
         drawPanel.setBackground(Color.white);
 
-        addAPBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                APMode = true;
-                userMode = false ;
-                obstacleMode = false;
-            }
+        addAPBtn.addActionListener(actionEvent -> {
+            APMode = true;
+            userMode = false ;
+            obstacleMode = false;
         });
         addUserBtn.addActionListener(actionEvent -> {
             userMode = true;
@@ -167,10 +164,83 @@ public class ProgramUI extends JFrame implements MouseListener {
             obs.drawObstacle(ga);
             obs_list.add(obs);
 
+            AccessPoint affectedAP = AccessPoint.calculateAP(obs.xc,obs.yc,APs);
+            int pixX,pixY ;
+            double f = (1-obs.factAttenuation);
+
+
+            // 1= right/above, -1 = left/below
+            if(obs.leftOrRight(affectedAP.xc)==1){
+                pixX = obs.xc+5 ; //+width
+                if(obs.aboveOrBelow(affectedAP.yc)==1){
+                    pixY = obs.yc+25; //+height
+                    while (affectedAP.isInRange(pixX,pixY)) {
+                        while (affectedAP.isInRange(pixX, pixY)) {
+                            degradeColor(pixX, pixY, f);
+                            pixY--;
+                        }
+                        pixX++;
+                        pixY = obs.yc+25; //+height
+                    }
+
+
+                } else {
+                    pixY = obs.yc; //+height
+                    while (affectedAP.isInRange(pixX,pixY)) {
+                        while (affectedAP.isInRange(pixX, pixY)) {
+                            degradeColor(pixX, pixY, f);
+                            pixY++;
+                        }
+                        pixX++;
+                        pixY = obs.yc;
+                    }
+                }
+            } else {
+                pixX = obs.xc;
+                if(obs.aboveOrBelow(affectedAP.yc)==1){
+                    pixY = obs.yc+25; //+height
+                    while (affectedAP.isInRange(pixX,pixY)) {
+                        while (affectedAP.isInRange(pixX, pixY)) {
+                            degradeColor(pixX, pixY, f);
+                            pixY--;
+                        }
+                        pixX--;
+                        pixY = obs.yc+25; //+height
+                    }
+
+                } else {
+                    pixY = obs.yc;
+                    while (affectedAP.isInRange(pixX,pixY)) {
+                        while (affectedAP.isInRange(pixX, pixY)) {
+                            degradeColor(pixX, pixY, f);
+                            pixY++;
+                        }
+                        pixX--;
+                        pixY = obs.yc;
+                    }
+
+                }
+            }
+
         }
 
     }
 
+    void degradeColor(int pixX, int pixY, double f) {
+        Robot robot;
+        Color C;
+        Shape square;
+        try {
+            robot = new Robot();
+            C = robot.getPixelColor(pixX,pixY);
+            C = new Color(C.getRed(), (int) Math.floor(C.getGreen()*f), 0, 128);
+            square = new Rectangle2D.Double( pixX,pixY, 1, 1);
+            ga.setPaint(C);
+            ga.fill(square);
+        } catch (AWTException ex) {
+            ex.printStackTrace();
+        }
+    }
 
 
     @Override

@@ -49,4 +49,15 @@ public class Obstacle {
             g.setPaint(C);
             g.fill(rect);
         }
+
+        // @return 1 if right -1 if left to the AP(x,y)
+        int leftOrRight(int x){
+            return x<this.xc ? 1 : -1;
+        }
+        // @return 1 if above -1 if below the AP(x,y)
+        int aboveOrBelow(int y) {
+            return y<this.yc ? -1 : 1;
+        }
+
+
 }

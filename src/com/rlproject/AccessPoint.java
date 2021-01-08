@@ -18,7 +18,7 @@ public class AccessPoint {
         this.yc = y;
         this.num = n;
         this.puissance = puissance;
-        r= (int) puissance*250/300;
+        r= (int) puissance*250/300; //une puissance de 300mW couvre 250m
     }
 
     int i,j,G;
@@ -40,8 +40,12 @@ public class AccessPoint {
             }
     }
 
-     double distance( int x, int y) {
+    double distance( int x, int y) {
         return Math.sqrt((xc - x) * (xc - x) + (yc - y) * (yc - y));
+    }
+
+    boolean isInRange(int x,int y ){
+        return distance(x, y) < this.r;
     }
 
     // facteur d'attenuation du signal, si égal à 1 puissance maximale, si 0
