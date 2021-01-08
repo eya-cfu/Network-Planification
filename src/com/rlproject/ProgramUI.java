@@ -167,56 +167,60 @@ public class ProgramUI extends JFrame implements MouseListener {
             AccessPoint affectedAP = AccessPoint.calculateAP(obs.xc,obs.yc,APs);
             int pixX,pixY ;
             double f = (1-obs.factAttenuation);
-
+            int limit=0;
 
             // 1= right/above, -1 = left/below
             if(obs.leftOrRight(affectedAP.xc)==1){
                 pixX = obs.xc+5 ; //+width
                 if(obs.aboveOrBelow(affectedAP.yc)==1){
-                    pixY = obs.yc+25; //+height
+                    pixY = obs.yc+24; //+height
                     while (affectedAP.isInRange(pixX,pixY)) {
-                        while (affectedAP.isInRange(pixX, pixY)) {
+                        while (affectedAP.isInRange(pixX,pixY)&&pixY>=obs.yc-limit) {
                             degradeColor(pixX, pixY, f);
                             pixY--;
                         }
                         pixX++;
-                        pixY = obs.yc+25; //+height
+                        limit++;
+                        pixY = obs.yc+25-limit; //+height
                     }
 
 
                 } else {
                     pixY = obs.yc; //+height
                     while (affectedAP.isInRange(pixX,pixY)) {
-                        while (affectedAP.isInRange(pixX, pixY)) {
+                        while (affectedAP.isInRange(pixX,pixY)&&pixY<=obs.yc+25+limit) {
                             degradeColor(pixX, pixY, f);
                             pixY++;
                         }
                         pixX++;
-                        pixY = obs.yc;
+                        limit++;
+                        pixY = obs.yc+limit;
                     }
                 }
             } else {
-                pixX = obs.xc;
+                pixX = obs.xc-1;
                 if(obs.aboveOrBelow(affectedAP.yc)==1){
-                    pixY = obs.yc+25; //+height
+                    pixY = obs.yc+24; //+height
                     while (affectedAP.isInRange(pixX,pixY)) {
-                        while (affectedAP.isInRange(pixX, pixY)) {
+                        while (affectedAP.isInRange(pixX,pixY)&&pixY>=obs.yc-limit) {
                             degradeColor(pixX, pixY, f);
                             pixY--;
                         }
                         pixX--;
-                        pixY = obs.yc+25; //+height
+                        limit++;
+                        pixY = obs.yc+25-limit;; //+height
                     }
 
                 } else {
                     pixY = obs.yc;
                     while (affectedAP.isInRange(pixX,pixY)) {
-                        while (affectedAP.isInRange(pixX, pixY)) {
+                        while (affectedAP.isInRange(pixX,pixY)&&pixY<=obs.yc+25+limit) {
                             degradeColor(pixX, pixY, f);
                             pixY++;
                         }
                         pixX--;
-                        pixY = obs.yc;
+                        limit++;
+                        pixY = obs.yc+limit;
                     }
 
                 }
@@ -226,15 +230,15 @@ public class ProgramUI extends JFrame implements MouseListener {
 
     }
 
-    void degradeColor(int pixX, int pixY, double f) {
+    void degradeColor(int a, int b, double f) {
         Robot robot;
         Color C;
         Shape square;
         try {
             robot = new Robot();
-            C = robot.getPixelColor(pixX,pixY);
+            C = robot.getPixelColor(a,b);
             C = new Color(C.getRed(), (int) Math.floor(C.getGreen()*f), 0, 128);
-            square = new Rectangle2D.Double( pixX,pixY, 1, 1);
+            square = new Rectangle2D.Double( a,b, 1, 1);
             ga.setPaint(C);
             ga.fill(square);
         } catch (AWTException ex) {
