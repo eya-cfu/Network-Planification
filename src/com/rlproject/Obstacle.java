@@ -54,7 +54,7 @@ public class Obstacle {
         int leftOrRight(int x){
             return x<this.xc ? 1 : -1;
         }
-        // @return 1 if above -1 if below the AP(x,y)
+        // @return -1 if above 1 if below the AP(x,y)
         int aboveOrBelow(int y) {
             return y<this.yc ? -1 : 1;
         }

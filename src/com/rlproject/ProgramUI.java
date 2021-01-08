@@ -164,12 +164,17 @@ public class ProgramUI extends JFrame implements MouseListener {
             obs.drawObstacle(ga);
             obs_list.add(obs);
 
+            if(APs.size()==0){
+                return;
+            }
             AccessPoint affectedAP = AccessPoint.calculateAP(obs.xc,obs.yc,APs);
             int pixX,pixY ;
             double f = (1-obs.factAttenuation);
             int limit=0;
-
-            // 1= right/above, -1 = left/below
+            if(!affectedAP.isInRange(obs.xc,obs.yc)){
+                return;
+            }
+            // 1= right/below, -1 = left/above
             if(obs.leftOrRight(affectedAP.xc)==1){
                 pixX = obs.xc+5 ; //+width
                 if(obs.aboveOrBelow(affectedAP.yc)==1){
