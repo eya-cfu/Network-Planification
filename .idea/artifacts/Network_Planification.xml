@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact name="Network Planification">
+    <output-path>$PROJECT_DIR$/out/artifacts/Network_Planification</output-path>
+    <root id="root">
+      <element id="archive" name="Network Planification.jar">
+        <element id="module-output" name="Network Planification" />
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

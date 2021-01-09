@@ -213,7 +213,7 @@ public class ProgramUI extends JFrame implements MouseListener {
                         }
                         pixX--;
                         limit++;
-                        pixY = obs.yc+25-limit;; //+height
+                        pixY = obs.yc+25-limit; //+height
                     }
 
                 } else {
