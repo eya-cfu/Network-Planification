@@ -74,7 +74,10 @@ public class ProgramUI extends JFrame implements MouseListener {
             userMode = true;
             APMode = false;
             obstacleMode = false;
-          /*  String s1 = JOptionPane.showInputDialog("Entree les coordonnees de l'utilisateur x-y\n" +
+          /* Below adding user manually by giving (x,y) coordinates.
+             This is changed by picking the mouse click in mouseReleased() method.
+
+            String s1 = JOptionPane.showInputDialog("Entree les coordonnees de l'utilisateur x-y\n" +
                     "0<x<645 et 0<y<500");
             x= Integer.parseInt(s1.substring(0, s1.indexOf('-')));
             y= Integer.parseInt(s1.substring(s1.indexOf('-')+1));
@@ -130,6 +133,7 @@ public class ProgramUI extends JFrame implements MouseListener {
             y = e.getY();
         }
 
+        //Add AP
         if(APMode){
             try {
                 puissance = Float.parseFloat(tfPuissance.getText());
@@ -143,6 +147,7 @@ public class ProgramUI extends JFrame implements MouseListener {
                         "Alerte",JOptionPane.WARNING_MESSAGE);
             }
 
+        //Add user
         }else if(userMode){
 
             User user = new User(x, y);
@@ -158,6 +163,7 @@ public class ProgramUI extends JFrame implements MouseListener {
             userLabel.setVisible(true);
 
 
+        //Add obstacle
         }else if(obstacleMode){
 
             Obstacle obs = new Obstacle(x, y, material);
@@ -174,6 +180,8 @@ public class ProgramUI extends JFrame implements MouseListener {
             if(!affectedAP.isInRange(obs.xc,obs.yc)){
                 return;
             }
+
+            //Calculate obstacle position
             // 1= right/below, -1 = left/above
             if(obs.leftOrRight(affectedAP.xc)==1){
                 pixX = obs.xc+5 ; //+width

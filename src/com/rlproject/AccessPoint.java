@@ -51,7 +51,7 @@ public class AccessPoint {
     // facteur d'attenuation du signal, si égal à 1 puissance maximale, si 0
     //pas de signal
     private double facteur_Attenuation( int x, int y)
-    { // estimation à corriger selon la formule d’attenuation !!!
+    {
         double f = 1.0 - distance( x, y) / ((double) r);
         if (f < 0) return (0);
         return (f);

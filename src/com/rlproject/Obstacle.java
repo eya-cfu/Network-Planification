@@ -1,6 +1,6 @@
 package com.rlproject;
 import java.awt.* ;
-public class Obstacle {
+ class Obstacle {
 
      int xc, yc;
      String material;
@@ -8,7 +8,7 @@ public class Obstacle {
      Color C;
      Shape rect;
 
-        public Obstacle (int xc, int yc, String m) {
+     Obstacle (int xc, int yc, String m) {
             this.xc=xc;
             this.yc=yc;
             material=m;
