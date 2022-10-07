@@ -1,6 +1,4 @@
 # Network-Planification
-In development mode 
-
 Network Planification GUI app.
 Add Access Points, view their range and signal strength, find closest AP to a given point.
 
